@@ -1,0 +1,5 @@
+E:\GIT\KScript\KScript.Runtime\bin\Debug\KScript.Runtime.dll
+E:\GIT\KScript\KScript.Runtime\bin\Debug\KScript.Runtime.pdb
+E:\GIT\KScript\KScript.Runtime\obj\Debug\KScript.Runtime.csproj.CoreCompileInputs.cache
+E:\GIT\KScript\KScript.Runtime\obj\Debug\KScript.Runtime.dll
+E:\GIT\KScript\KScript.Runtime\obj\Debug\KScript.Runtime.pdb
