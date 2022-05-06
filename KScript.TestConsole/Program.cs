@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,11 +19,11 @@ namespace KScript.TestConsole
 
             Script script = new Script( 4, new[]
                 {
-                    (OpCode.GOTO_IF_ZERO, new dynamic[] { 3, 4 }),
-                    (OpCode.SUBTRACT, new dynamic[] { 3, 1 }),
-                    (OpCode.ADD, new dynamic[] { 2, 1 }), // 40 ms vs 52 with this one line added.
-                    (OpCode.GOTO, new dynamic[] { 0 }),
-                    (OpCode.EXIT, new dynamic[] {})
+                    (OpCode.GOTO_IF_ZERO_I32, new StackElement[] { 3, 4 }),
+                    (OpCode.SUBTRACT_I32, new StackElement[] { 3, 1 }),
+                    (OpCode.ADD_I32, new StackElement[] { 2, 1 }), // 40 ms vs 52 with this one line added.
+                    (OpCode.GOTO, new StackElement[] { 0 }),
+                    (OpCode.EXIT, new StackElement[] {})
                 } );
 
             script.Push( 0 );
@@ -81,6 +82,34 @@ namespace KScript.TestConsole
             sw.Stop();
 
             Console.WriteLine( $"object array: {sw.ElapsedMilliseconds}" );
+
+            StackElement[] vars4 = new StackElement[4]
+            {
+                0, 0, 0, 0
+            };
+
+            sw.Restart();
+            for( int i = 0; i < 30000000; i++ )
+            {
+                vars4[i % 4].Int32 += 1;
+            }
+            sw.Stop();
+
+            Console.WriteLine( $"struct array (int): {sw.ElapsedMilliseconds}" );
+            
+            vars4 = new StackElement[4]
+            {
+                0, 0, 0, 0
+            };
+
+            sw.Restart();
+            for( int i = 0; i < 30000000; i++ )
+            {
+                vars4[i % 4].Int32 += 1;
+            }
+            sw.Stop();
+
+            Console.WriteLine( $"struct array (float): {sw.ElapsedMilliseconds}" );
 
             Console.ReadKey();
         }

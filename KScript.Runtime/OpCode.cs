@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace KScript.Runtime
 {
     public enum OpCode
     {
         // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         //
-        // [int] - Pointer
-        //          All pointers are an offset from the stack frame pointer.
-        // [num] - Variable (int/long/float/double/etc)
+        //          ARGUMENT TYPES:
         //
-        // It's up to the compiler to make sure these operands are correct.
+        // [ptr] - Pointer
+        //          All pointers are an offset from the stack frame pointer.
+        // [any] - Variable (any type)
+        // [int32] - Variable (32 bit integer)
+        // [float32] - Variable (32 bit floating point)
+        //
+        // It's up to the compiler to make sure the operands passed are correct for a given opcode.
         //
         // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -29,21 +28,26 @@ namespace KScript.Runtime
         EXTERN_CALL,
 
         /// <summary>
-        ///  _ [int] -- moves the current operation to ^
+        ///  _ [ptr] -- moves the current operation to a
         /// </summary>
         GOTO,
 
         /// <summary>
-        /// _ [num] [int] -- moves the current operation to ^ if the variable at a is zero
+        /// _ [ptr] [ptr] -- moves the current operation to a if the value of the variable at b is zero
         /// </summary>
-        GOTO_IF_ZERO,
+        GOTO_IF_ZERO_I32,
 
         /// <summary>
-        /// _ [int] -- pushes a to the return stack
+        /// _ [ptr] [ptr] -- moves the current operation to a if the value of the variable at b is zero
+        /// </summary>
+        GOTO_IF_ZERO_F32,
+
+        /// <summary>
+        /// _ [ptr] -- pushes a to the return stack
         /// </summary>
         PUSH_RET,
         /// <summary>
-        /// _ [int] -- pops the top of the return stack and loads it into a
+        /// _ [ptr] -- pops the top of the return stack and loads it into a
         /// </summary>
         POP_RET,
 
@@ -61,65 +65,110 @@ namespace KScript.Runtime
         // Arithmetic
 
         /// <summary>
-        /// _ [int] [int] -- adds b to a, result is stored in a
+        /// _ [ptr] [ptr] -- adds b to a, result is stored in a
         /// </summary>
-        ADD,
+        ADD_I32,
         /// <summary>
-        /// _ [int] [num] -- adds b to a, result is stored in a
+        /// _ [ptr] [int32] -- adds b to a, result is stored in a
         /// </summary>
-        ADD_CONST,
+        ADD_I32_CONST,
 
         /// <summary>
-        /// _ [int] [int] -- subtracts b from a, result is stored in a
+        /// _ [ptr] [ptr] -- subtracts b from a, result is stored in a
         /// </summary>
-        SUBTRACT,
+        SUBTRACT_I32,
         /// <summary>
-        /// _ [int] [num] -- subtracts b from a, result is stored in a
+        /// _ [ptr] [int32] -- subtracts b from a, result is stored in a
         /// </summary>
-        SUBTRACT_CONST,
+        SUBTRACT_I32_CONST,
+        
+        /// <summary>
+        /// _ [ptr] [ptr] -- multiplies a and b, result is stored in a
+        /// </summary>
+        MULTIPLY_I32,
+        /// <summary>
+        /// _ [ptr] [int32] -- multiplies a and b, result is stored in a
+        /// </summary>
+        MULTIPLY_I32_CONST,
+        
+        /// <summary>
+        /// _ [ptr] [ptr] -- divides a and b, result is stored in a
+        /// </summary>
+        DIVIDE_I32,
+        /// <summary>
+        /// _ [ptr] [int32] -- divides a and b, result is stored in a
+        /// </summary>
+        DIVIDE_I32_CONST,
+        
+        /// <summary>
+        /// _ [ptr] [ptr] -- performs a modulo division a mod b, result is stored in a
+        /// </summary>
+        MODULO_I32,
+        /// <summary>
+        /// _ [ptr] [int32] -- performs a modulo division a mod b, result is stored in a
+        /// </summary>
+        MODULO_I32_CONST,
 
         /// <summary>
-        /// _ [int] [int] -- multiplies a and b, result is stored in a
+        /// _ [ptr] [ptr] -- adds b to a, result is stored in a
         /// </summary>
-        MULTIPLY,
+        ADD_F32,
         /// <summary>
-        /// _ [int] [num] -- multiplies a and b, result is stored in a
+        /// _ [ptr] [float32] -- adds b to a, result is stored in a
         /// </summary>
-        MULTIPLY_CONST,
+        ADD_F32_CONST,
 
         /// <summary>
-        /// _ [int] [int] -- divides a and b, result is stored in a
+        /// _ [ptr] [ptr] -- subtracts b from a, result is stored in a
         /// </summary>
-        DIVIDE,
+        SUBTRACT_F32,
         /// <summary>
-        /// _ [int] [num] -- divides a and b, result is stored in a
+        /// _ [ptr] [float32] -- subtracts b from a, result is stored in a
         /// </summary>
-        DIVIDE_CONST,
+        SUBTRACT_F32_CONST,
 
         /// <summary>
-        /// _ [int] [int] -- performs a modulo division a mod b, result is stored in a
+        /// _ [ptr] [ptr] -- multiplies a and b, result is stored in a
         /// </summary>
-        MODULO,
+        MULTIPLY_F32,
         /// <summary>
-        /// _ [int] [num] -- performs a modulo division a mod b, result is stored in a
+        /// _ [ptr] [float32] -- multiplies a and b, result is stored in a
         /// </summary>
-        MODULO_CONST,
+        MULTIPLY_F32_CONST,
 
         /// <summary>
-        /// _ [int] [int] -- copies the value at b to a, result is stored in a
+        /// _ [ptr] [ptr] -- divides a and b, result is stored in a
+        /// </summary>
+        DIVIDE_F32,
+        /// <summary>
+        /// _ [ptr] [float32] -- divides a and b, result is stored in a
+        /// </summary>
+        DIVIDE_F32_CONST,
+
+        /// <summary>
+        /// _ [ptr] [ptr] -- performs a modulo division a mod b, result is stored in a
+        /// </summary>
+        MODULO_F32,
+        /// <summary>
+        /// _ [ptr] [float32] -- performs a modulo division a mod b, result is stored in a
+        /// </summary>
+        MODULO_F32_CONST,
+
+        /// <summary>
+        /// _ [ptr] [ptr] -- copies the value at b to a, result is stored in a
         /// </summary>
         SET,
         /// <summary>
-        /// _ [int] [num] -- copies b to a, result is stored in a
+        /// _ [ptr] [any] -- copies b to a, result is stored in a
         /// </summary>
         SET_CONST,
-            
+
         /// <summary>
-        /// _ [int] -- pushes the value at a on top of the stack, increments the stack pointer
+        /// _ [ptr] -- pushes the value at a on top of the stack, increments the stack pointer
         /// </summary>
         PUSH,
         /// <summary>
-        /// _ [num] -- pushes a on top of the stack, increments the stack pointer
+        /// _ [any] -- pushes a on top of the stack, increments the stack pointer
         /// </summary>
         PUSH_CONST
 
