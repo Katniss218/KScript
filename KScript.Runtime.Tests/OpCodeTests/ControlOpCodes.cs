@@ -44,7 +44,7 @@ namespace KScript.Tests.OpCodeTests
 
             Assert.IsTrue( script.Stack[1].Int32 == 5 ); // skip first addition
         }
-        
+
         [TestMethod]
         public void GotoIfZeroF32()
         {
@@ -172,6 +172,5 @@ namespace KScript.Tests.OpCodeTests
 
             Assert.IsTrue( script.StackPointer == 2 ); // 2 initial vars, next pointed to by stack pointer
         }
-
     }
 }

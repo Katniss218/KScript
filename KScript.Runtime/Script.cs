@@ -21,7 +21,7 @@ namespace KScript.Runtime
         /// </remarks>
         public int StackPointer { get; private set; }
         /// <summary>
-        /// Points to the base ('caller_frame_base_pointer') of the current stack frame.
+        /// Points to the base of the current stack frame (which should contain the pointer to the stack frame below it, and so on).
         /// </summary>
         public int CurrentStackFramePointer { get; private set; }
 

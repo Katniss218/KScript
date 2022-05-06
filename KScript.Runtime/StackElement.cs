@@ -31,6 +31,10 @@ namespace KScript.Runtime
         [FieldOffset( 0 )]
         public int Ptr;
 
+
+        // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
         public static implicit operator StackElement( int a ) => new StackElement()
         {
             Int32 = a

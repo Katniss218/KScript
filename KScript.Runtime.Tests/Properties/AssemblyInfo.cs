@@ -2,11 +2,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle( "KScript.Tests" )]
+[assembly: AssemblyTitle( "KScript.Runtime.Tests" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "KScript.Tests" )]
+[assembly: AssemblyProduct( "KScript.Runtime.Tests" )]
 [assembly: AssemblyCopyright( "Copyright ©  2022" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
