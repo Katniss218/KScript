@@ -1,0 +1,6 @@
+E:\GIT\KScript\KScript.Runtime\bin\Release\KScript.Runtime.dll
+E:\GIT\KScript\KScript.Runtime\bin\Release\KScript.Runtime.pdb
+E:\GIT\KScript\KScript.Runtime\obj\Release\KScript.Runtime.csproj.AssemblyReference.cache
+E:\GIT\KScript\KScript.Runtime\obj\Release\KScript.Runtime.csproj.CoreCompileInputs.cache
+E:\GIT\KScript\KScript.Runtime\obj\Release\KScript.Runtime.dll
+E:\GIT\KScript\KScript.Runtime\obj\Release\KScript.Runtime.pdb

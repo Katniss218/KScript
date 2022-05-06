@@ -16,31 +16,26 @@ namespace KScript.TestConsole
 
             // 16 ms in 60fps 
 
-            Script script = new Script()
-            {
-                Variables = new dynamic[]
-                {
-                    0,
-                    5,
-                    5,
-                    1000000
-                },
-                Op = new (OpCode opCode, dynamic[] data)[]
+            Script script = new Script( 4, new[]
                 {
                     (OpCode.GOTO_IF_ZERO, new dynamic[] { 3, 4 }),
                     (OpCode.SUBTRACT, new dynamic[] { 3, 1 }),
-                    (OpCode.ADD, new dynamic[] { 2, 1 }), // 40 ms vs 52 with this one line added
+                    (OpCode.ADD, new dynamic[] { 2, 1 }), // 40 ms vs 52 with this one line added.
                     (OpCode.GOTO, new dynamic[] { 0 }),
                     (OpCode.EXIT, new dynamic[] {})
-                }
-            };
+                } );
+
+            script.Push( 0 );
+            script.Push( 5 );
+            script.Push( 5 );
+            script.Push( 1000000 );
 
             sw.Start();
 
             script.Run();
 
             sw.Stop();
-            Console.WriteLine( sw.ElapsedMilliseconds );
+            Console.WriteLine( $"goto script funky: {sw.ElapsedMilliseconds}" );
 
 
             dynamic[] vars = new dynamic[4]
@@ -55,7 +50,7 @@ namespace KScript.TestConsole
             }
             sw.Stop();
 
-            Console.WriteLine( sw.ElapsedMilliseconds );
+            Console.WriteLine( $"dynamic array: {sw.ElapsedMilliseconds}" );
 
             int[] vars2 = new int[4]
             {
@@ -69,7 +64,7 @@ namespace KScript.TestConsole
             }
             sw.Stop();
 
-            Console.WriteLine( sw.ElapsedMilliseconds );
+            Console.WriteLine( $"int array: {sw.ElapsedMilliseconds}" );
 
             object[] vars3 = new object[4]
             {
@@ -85,8 +80,9 @@ namespace KScript.TestConsole
             }
             sw.Stop();
 
-            Console.WriteLine( sw.ElapsedMilliseconds );
+            Console.WriteLine( $"object array: {sw.ElapsedMilliseconds}" );
 
+            Console.ReadKey();
         }
     }
 }
