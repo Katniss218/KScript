@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace KScript.Language.InputLanguage.Infrastructure
 {
-    /// <summary>
-    /// Represents a .ks file.
-    /// </summary>
-    public class Script
+    public enum UnaryOperator
     {
-        public List<Function> Functions { get; set; } = new List<Function>();
+        Plus,
+        Minus
     }
 }

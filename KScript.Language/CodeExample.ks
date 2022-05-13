@@ -4,5 +4,5 @@
 
 func void Update()
 {
-	
+	int32 a = 0;
 }

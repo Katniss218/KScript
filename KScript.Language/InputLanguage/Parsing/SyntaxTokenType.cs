@@ -3,6 +3,8 @@ namespace KScript.Language.Parsing
 {
     public enum SyntaxTokenType
     {
+        #region Primitive Tokens (single-iteration only)
+
         /// <summary>
         /// '['
         /// </summary>
@@ -24,6 +26,16 @@ namespace KScript.Language.Parsing
         CloseCurlyBracket,
 
         /// <summary>
+        /// '('
+        /// </summary>
+        OpenParenthesis,
+
+        /// <summary>
+        /// ')'
+        /// </summary>
+        CloseParenthesis,
+
+        /// <summary>
         /// ' ', '\t'
         /// </summary>
         WhiteSpace,
@@ -39,9 +51,34 @@ namespace KScript.Language.Parsing
         Dot,
 
         /// <summary>
+        /// '+'
+        /// </summary>
+        Plus,
+
+        /// <summary>
+        /// '-'
+        /// </summary>
+        Minus,
+
+        /// <summary>
+        /// '*'
+        /// </summary>
+        Asterisk,
+
+        /// <summary>
         /// '/'
         /// </summary>
         Slash,
+
+        /// <summary>
+        /// '%'
+        /// </summary>
+        Percent,
+
+        /// <summary>
+        /// ';'
+        /// </summary>
+        Semicolon,
 
         /// <summary>
         /// '//'
@@ -59,8 +96,38 @@ namespace KScript.Language.Parsing
         AsteriskSlash,
 
         /// <summary>
-        /// Any text
+        /// [0-9]
         /// </summary>
+        Digit,
+
+        #endregion
+
+        #region Hybrid Tokens (exist in single-iteration, can be combined with each other)
+
+        /// <summary>
+        /// Any token that is not defined otherwise.
+        /// </summary>
+        /// <remarks>
+        /// Text
+        ///     : Text*
+        /// </remarks>
         Text,
+
+        #endregion
+
+        #region Compound Tokens (created by combining multiple primitive tokens)
+
+        /// <summary>
+        /// Integer
+        ///     : Digit*
+        /// </summary>
+        Integer,
+
+        #endregion
+
+        /// <summary>
+        /// technical use, invalid token
+        /// </summary>
+        NULL,
     }
 }

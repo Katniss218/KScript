@@ -8,10 +8,10 @@ namespace KScript.Language.InputLanguage.Infrastructure
 {
     public class Function
     {
-        public List<Variable> ReturnValues { get; set; }
+        public List<Variable> ReturnValues { get; set; } = new List<Variable>();
 
-        public List<Variable> Parameters { get; set; }
+        public List<Variable> Parameters { get; set; } = new List<Variable>();
 
-        public List<Statement> Body { get; set; }
+        public StatementList Body { get; set; }
     }
 }

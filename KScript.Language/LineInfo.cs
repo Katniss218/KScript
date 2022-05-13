@@ -21,7 +21,7 @@ namespace KScript.Language
 
 		public override string ToString()
 		{
-			return "'" + this.FileName + "' - line: " + this.LineNo + ", col: " + this.ColNo;
+			return "file: '" + this.FileName + "' - line: " + this.LineNo + ", col: " + this.ColNo;
 		}
 
 		public static LineInfo Calculate( string fileName, string s, int pos )

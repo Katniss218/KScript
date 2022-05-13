@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace KScript.Language.InputLanguage.Infrastructure
 {
-    /// <summary>
-    /// Represents a .ks file.
-    /// </summary>
-    public class Script
+    public enum BinaryOperator
     {
-        public List<Function> Functions { get; set; } = new List<Function>();
+        Add,
+        Sub,
+        Mul,
+        Div,
+        Mod
     }
 }

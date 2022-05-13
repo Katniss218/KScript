@@ -43,13 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompilerStuff.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RuntimeStuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KScript.Language\KScript.Language.csproj">
+      <Project>{712436b8-7db2-4811-b480-31077d1d33a5}</Project>
+      <Name>KScript.Language</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KScript.Runtime\KScript.Runtime.csproj">
       <Project>{b23bd085-8624-40d0-a6c6-909cd4e3b262}</Project>
       <Name>KScript.Runtime</Name>
