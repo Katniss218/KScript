@@ -1,4 +1,5 @@
 ﻿using KScript.Language.InputLanguage.Infrastructure;
+using KScript.Language.InputLanguage.Infrastructure.CST;
 using KScript.Language.InputLanguage.Parsing.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -18,23 +19,96 @@ namespace KScript.Language.Parsing
 
         private SyntaxToken _currentToken => this._pos >= this.Tokens.Count ? new SyntaxToken( SyntaxTokenType.NULL, null, null ) : this.Tokens[this._pos];
 
-        private void EatToken( SyntaxTokenType type )
+        /// <summary>
+        /// Ensures that the current token is of the specified type, and consumes it.
+        /// </summary>
+        private string EatToken( SyntaxTokenType type )
         {
             if( this._currentToken.Type != type )
             {
                 throw new KSParseException( $"Invalid token '{this._currentToken.Type}: \"{this._currentToken.Value}\"' at {this._currentToken.LineInfo}" );
             }
+            string tokenVal = this._currentToken.Value;
             this._pos++;
+            return tokenVal;
         }
 
+
+
         /// <summary>
-        /// Parses the input into a syntax tree.
+        /// Parses the input tokens. Primary.
         /// </summary>
         public SyntaxNode Parse()
         {
-            SyntaxNode node = EatExpr();
+            SyntaxNode node = EatStatementList();
 
             return node;
+        }
+
+        /// <summary>
+        /// StatementList
+        ///     : '{' Statement* '}'
+        ///     ;
+        /// </summary>
+        public SyntaxNode EatStatementList()
+        {
+            List<Statement> statements = new List<Statement>();
+
+            EatToken( SyntaxTokenType.OpenCurlyBracket );
+
+            while( _currentToken.Type != SyntaxTokenType.CloseCurlyBracket )
+            {
+                Statement statementNode = EatStatement();
+                statements.Add( statementNode );
+            }
+
+            EatToken( SyntaxTokenType.CloseCurlyBracket );
+
+            return new StatementList() { Statements = statements };
+        }
+
+        /// <summary>
+        /// Statement
+        ///     : AssignmentStatement
+        ///     ;
+        /// </summary>
+        public Statement EatStatement()
+        {
+            return EatAssignmentStatement();
+        }
+
+        /// <summary>
+        /// AssignmentStatement
+        ///     : Identifier '=' Expression `;`
+        ///     ;
+        /// </summary>
+        public AssignmentStatement EatAssignmentStatement()
+        {
+            Identifier identifier = EatIdentifier();
+
+            EatToken( SyntaxTokenType.Equals );
+
+            SyntaxNode expression = EatExpr();
+
+            EatToken( SyntaxTokenType.Semicolon );
+
+            return new AssignmentStatement()
+            {
+                Identifier = identifier,
+                Expression = expression
+            };
+        }
+
+        /// <summary>
+        /// Identifier
+        ///     : [A-Za-z_] [A-Za-z0-9_]*
+        ///     ;
+        /// </summary>
+        public Identifier EatIdentifier()
+        {
+            // TODO - not accurate
+            string val = EatToken( SyntaxTokenType.Text );
+            return new Identifier( val );
         }
 
         /// <summary>
@@ -112,6 +186,7 @@ namespace KScript.Language.Parsing
         /// <summary>
         /// Factor
         ///     : Integer
+        ///     | Identifier
         ///     | '(' Expression ')'
         ///     ;
         /// </summary>
@@ -123,12 +198,19 @@ namespace KScript.Language.Parsing
 
                 EatToken( SyntaxTokenType.Integer );
 
-                return new ConstantExpression()
-                {
-                    Type = "Integer",
-                    Literal = val
-                };
+                return new Literal( LiteralType.Integer, val);
             }
+
+            if( _currentToken.Type == SyntaxTokenType.Text )
+            {
+                string val = _currentToken.Value;
+
+                EatToken( SyntaxTokenType.Text );
+
+                return new Identifier( val );
+            }
+
+            // TODO - identifiers (variables)
 
             if( _currentToken.Type == SyntaxTokenType.OpenParenthesis )
             {

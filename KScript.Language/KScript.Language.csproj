@@ -41,26 +41,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputLanguage\Infrastructure\CST\Identifier.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Literal.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\UnaryExpression.cs" />
     <Compile Include="InputLanguage\Infrastructure\BinaryOperator.cs" />
-    <Compile Include="InputLanguage\Infrastructure\Expression.cs" />
-    <Compile Include="InputLanguage\Infrastructure\Function.cs" />
-    <Compile Include="InputLanguage\Infrastructure\Script.cs" />
-    <Compile Include="InputLanguage\Infrastructure\Statement.cs" />
-    <Compile Include="InputLanguage\Infrastructure\StatementList.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\AssignmentStatement.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\ReturnStatement.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\IfStatement.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Expression.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Function.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Script.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\DeclarationStatement.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\BinaryExpression.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Statement.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\SyntaxNode.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\StatementList.cs" />
     <Compile Include="InputLanguage\Infrastructure\UnaryOperator.cs" />
-    <Compile Include="InputLanguage\Infrastructure\Variable.cs" />
+    <Compile Include="InputLanguage\Infrastructure\CST\Variable.cs" />
     <Compile Include="InputLanguage\Parsing\Exceptions\KSParseException.cs" />
     <Compile Include="LineInfo.cs" />
     <Compile Include="InputLanguage\Parsing\Parser.cs" />
     <Compile Include="InputLanguage\Parsing\Lexer.cs" />
     <Compile Include="InputLanguage\Parsing\SyntaxToken.cs" />
     <Compile Include="InputLanguage\Parsing\SyntaxTokenType.cs" />
+    <Compile Include="OutputLanguage\CodeGenerator\CodeGen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InputLanguage\Compilation\" />
-    <Folder Include="OutputLanguage\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeExample.ks" />

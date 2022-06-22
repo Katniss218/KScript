@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace KScript.Runtime
 {
     /// <summary>
-    /// A funny struct union to allow type pruning. Used to access any kind of value.
+    /// A funny struct union to allow type punning. Used to access any kind of value.
     /// </summary>
     [StructLayout( LayoutKind.Explicit )]
     public struct StackElement

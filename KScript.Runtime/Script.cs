@@ -17,9 +17,10 @@ namespace KScript.Runtime
         /// Points to the top of the stack.
         /// </summary>
         /// <remarks>
-        /// Points to the last unused index.
+        /// Points to the index above the top-most element.
         /// </remarks>
         public int StackPointer { get; private set; }
+
         /// <summary>
         /// Points to the base of the current stack frame (which should contain the pointer to the stack frame below it, and so on).
         /// </summary>
@@ -30,19 +31,35 @@ namespace KScript.Runtime
         /// </summary>
         public Stack<StackElement> ReturnStack { get; set; }
 
-        // User-defined structs could be just sequences of variables, like they are in real programs.
+
+        // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 
         /// <summary>
         /// Instructions
         /// </summary>
         public (OpCode opCode, StackElement[] data)[] Op { get; private set; }
+
         /// <summary>
         /// Instruction pointer
         /// </summary>
         public int Current { get; private set; }
 
+
+        // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+        /// <summary>
+        /// The number of operations that have been performed in the lifetime of this script.
+        /// </summary>
         public long OperationCounter { get; private set; }
+
+        /// <summary>
+        /// The maximum number of operations allowed in the lifetime of this script.
+        /// </summary>
         public long? MaxOperations { get; private set; }
+
+
 
         public Script( int stackSize, (OpCode opCode, StackElement[] data)[] op )
         {
@@ -54,6 +71,8 @@ namespace KScript.Runtime
 
             this.ReturnStack = new Stack<StackElement>();
         }
+
+
 
         /// <summary>
         /// Pushes 'a' onto the stack, increments the stack pointer.
@@ -250,6 +269,8 @@ namespace KScript.Runtime
 
                         Current = CurrentStackFramePointer + data[0].Ptr;
                         continue; // don't auto-increment the current
+
+                    // stack frame / function calls
 
                     case OpCode.PUSH_STACK_FRAME:
 

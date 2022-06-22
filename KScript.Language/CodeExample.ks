@@ -1,6 +1,6 @@
 ﻿
 
-// every piece of runnable code is in a function
+// every piece of runnable code is inside a function
 
 func void Update()
 {

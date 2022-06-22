@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KScript.Language.InputLanguage.Infrastructure
+namespace KScript.Language.InputLanguage.Infrastructure.CST
 {
     public class Function
     {

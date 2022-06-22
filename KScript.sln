@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KScript.Language", "KScript
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KScript.Runtime.Tests", "KScript.Runtime.Tests\KScript.Runtime.Tests.csproj", "{FD3B4B91-064D-419D-A133-1C0A5810A55D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KScript.Language.Tests", "KScript.Language.Tests\KScript.Language.Tests.csproj", "{D4EDA1F5-4608-4B2D-A02A-621E5937F751}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{FD3B4B91-064D-419D-A133-1C0A5810A55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3B4B91-064D-419D-A133-1C0A5810A55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3B4B91-064D-419D-A133-1C0A5810A55D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4EDA1F5-4608-4B2D-A02A-621E5937F751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4EDA1F5-4608-4B2D-A02A-621E5937F751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4EDA1F5-4608-4B2D-A02A-621E5937F751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4EDA1F5-4608-4B2D-A02A-621E5937F751}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

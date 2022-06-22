@@ -33,6 +33,10 @@ namespace KScript.Language.Parsing
 
         private char _currentChar => this.S[this._pos];
 
+        private SyntaxToken _previousToken => (this._pos < 1 || this._pos >= (this._lexed.Count + 1)) ? new SyntaxToken( SyntaxTokenType.NULL, null, null ) : this._lexed[this._pos - 1];
+        private SyntaxToken _currentToken => (this._pos < 0 || this._pos >= this._lexed.Count) ? new SyntaxToken( SyntaxTokenType.NULL, null, null ) : this._lexed[this._pos];
+        private SyntaxToken _nextToken => (this._pos < -1 || this._pos >= (this._lexed.Count - 1)) ? new SyntaxToken( SyntaxTokenType.NULL, null, null ) : this._lexed[this._pos + 1];
+
         private char Peek()
         {
             return this.S[this._pos + 1];
@@ -99,11 +103,20 @@ namespace KScript.Language.Parsing
                     case '.':
                         AddToken( SyntaxTokenType.Dot, 1 );
                         break;
+                    case ',':
+                        AddToken( SyntaxTokenType.Comma, 1 );
+                        break;
+                    case '=':
+                        AddToken( SyntaxTokenType.Equals, 1 );
+                        break;
                     case '+':
                         AddToken( SyntaxTokenType.Plus, 1 );
                         break;
                     case '-':
                         AddToken( SyntaxTokenType.Minus, 1 );
+                        break;
+                    case '%':
+                        AddToken( SyntaxTokenType.Percent, 1 );
                         break;
                     case ';':
                         AddToken( SyntaxTokenType.Semicolon, 1 );
@@ -173,25 +186,25 @@ namespace KScript.Language.Parsing
 
             while( true )
             {
-                for( this._pos = 0; this._pos < this._lexed.Count; /*empty*/ )
+                for( this._pos = 0; this._pos < this._lexed.Count; /*pos is incremented by hand later*/ )
                 {
-                    if( this._lexed[this._pos].Type == SyntaxTokenType.WhiteSpace )
+                    if( this._currentToken.Type == SyntaxTokenType.WhiteSpace )
                     {
                         newList.Add( CombineStreak( SyntaxTokenType.WhiteSpace, SyntaxTokenType.WhiteSpace ) );
                         continue;
                     }
-                    if( this._lexed[this._pos].Type == SyntaxTokenType.Text )
+                    if( this._currentToken.Type == SyntaxTokenType.Text )
                     {
                         newList.Add( CombineStreak( SyntaxTokenType.Text, SyntaxTokenType.Text ) );
                         continue;
                     }
-                    if( this._lexed[this._pos].Type == SyntaxTokenType.Digit )
+                    if( this._currentToken.Type == SyntaxTokenType.Digit )
                     {
                         newList.Add( CombineStreak( SyntaxTokenType.Digit, SyntaxTokenType.Integer ) );
                         continue;
                     }
 
-                    newList.Add( this._lexed[this._pos] );
+                    newList.Add( this._currentToken );
                     this._pos++; // only increment if it didn't find a streak.
                 }
 
@@ -206,21 +219,67 @@ namespace KScript.Language.Parsing
             }
         }
 
+        private void ThirdPass()
+        {
+            List<SyntaxToken> newList = new List<SyntaxToken>();
+
+            while( true )
+            {
+                for( this._pos = 0; this._pos < this._lexed.Count; /*empty*/ )
+                {
+                    if( this._currentToken.Type == SyntaxTokenType.Text && (this._nextToken.Type == SyntaxTokenType.Integer || this._nextToken.Type == SyntaxTokenType.Text) )
+                    {
+                        SyntaxToken newToken = SyntaxToken.Combine( SyntaxTokenType.Text, this._currentToken, this._nextToken );
+                        newList.Add( newToken );
+                        this._pos += 2;
+                        continue;
+                    }
+
+                    newList.Add( this._currentToken );
+                    this._pos++; // only increment if it didn't find a streak.
+                }
+
+                // If nothing was changed, exit.
+                if( newList.SequenceEqual( this._lexed, new SyntaxTokenTypeValueComparer() ) )
+                {
+                    return;
+                }
+
+                this._lexed = newList;
+                newList = new List<SyntaxToken>();
+            }
+        }
+
+        /// <summary>
+        /// Lexes the input string. Primary.
+        /// </summary>
         public void Lex()
         {
             FirstPass();
 
             SecondPass();
+
+            ThirdPass();
         }
 
+        /// <summary>
+        /// Returns the lexed tokens.
+        /// </summary>
         public List<SyntaxToken> GetTokens()
         {
             return this._lexed.ToList();
         }
 
-        public List<SyntaxToken> GetTokensNoWhiteSpace()
+        /// <summary>
+        /// Returns the lexed tokens, skips over the whitespace & comment tokens.
+        /// </summary>
+        public List<SyntaxToken> GetTokensNoWhiteSpaceNoComment()
         {
-            return this._lexed.Where( t => t.Type != SyntaxTokenType.WhiteSpace ).ToList();
+            return this._lexed.Where(
+               t => t.Type != SyntaxTokenType.WhiteSpace
+                 && t.Type != SyntaxTokenType.NewLine
+                 && t.Type != SyntaxTokenType.Comment
+                 && t.Type != SyntaxTokenType.DelimitedComment ).ToList();
         }
     }
 }

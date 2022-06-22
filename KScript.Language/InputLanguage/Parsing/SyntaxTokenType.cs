@@ -51,6 +51,16 @@ namespace KScript.Language.Parsing
         Dot,
 
         /// <summary>
+        /// ','
+        /// </summary>
+        Comma,
+
+        /// <summary>
+        /// '='
+        /// </summary>
+        Equals,
+
+        /// <summary>
         /// '+'
         /// </summary>
         Plus,
@@ -110,6 +120,7 @@ namespace KScript.Language.Parsing
         /// <remarks>
         /// Text
         ///     : Text*
+        ///     ;
         /// </remarks>
         Text,
 
@@ -120,8 +131,23 @@ namespace KScript.Language.Parsing
         /// <summary>
         /// Integer
         ///     : Digit*
+        ///     ;
         /// </summary>
         Integer,
+
+        /// <summary>
+        /// Comment
+        ///     : DoubleSlash _any_ ^NewLine
+        ///     ;
+        /// </summary>
+        Comment,
+
+        /// <summary>
+        /// DelimitedComment
+        ///     : SlashAsterisk _any_ AsteriskSlash
+        ///     ;
+        /// </summary>
+        DelimitedComment,
 
         #endregion
 
