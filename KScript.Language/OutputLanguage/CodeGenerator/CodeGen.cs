@@ -30,7 +30,7 @@ namespace KScript.Language.OutputLanguage.CodeGenerator
         // I can use postfix notation to generate the instructions from the CST BinaryExpression.
         //        IF IF IF the stack machine pops the top operands and pushes the result on top of the stack.
 
-
+        /*
         public List<(OpCode opCode, StackElement[] operand)> GenerateInstructions( SyntaxNode node )
         {
             // switch type of node, call specific method.
@@ -49,7 +49,7 @@ namespace KScript.Language.OutputLanguage.CodeGenerator
             return (OpCode.PUSH_CONST, new StackElement[] { node.Value });
         }
 
-
+        */
 
     }
 }
