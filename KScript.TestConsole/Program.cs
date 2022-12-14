@@ -13,8 +13,8 @@ namespace KScript.TestConsole
     {
         static void Main( string[] args )
         {
-            //RuntimeStuff.Function();
-            CompilerStuff.Function();
+            RuntimeStuff.Function();
+            //CompilerStuff.Function();
 
             Console.WriteLine( "Press any key to exit..." );
             Console.ReadKey();

@@ -34,21 +34,21 @@ namespace KScript.Runtime
         GOTO,
 
         /// <summary>
-        /// _ [ptr] [ptr] -- moves the current operation to a if the value of the variable at b is zero
+        /// _ [ptr] -- Moves the current operation to the position stored at stack element {0}, represented as a pointer, if the value at the top of the stack is zero.
         /// </summary>
         GOTO_IF_ZERO_I32,
 
         /// <summary>
-        /// _ [ptr] [ptr] -- moves the current operation to a if the value of the variable at b is zero
+        /// _ [ptr] -- Moves the current operation to the position stored at stack element {0}, represented as a pointer, if the value at the top of the stack is zero.
         /// </summary>
         GOTO_IF_ZERO_F32,
 
         /// <summary>
-        /// _ [ptr] -- pushes a to the return stack
+        /// _ [ptr] -- Pushes the value of the stack element {0} to the return stack.
         /// </summary>
         PUSH_RET,
         /// <summary>
-        /// _ [ptr] -- pops the top of the return stack and loads it into a
+        /// _ [ptr] -- Pops the top of the return stack and stores it in the stack element {0}.
         /// </summary>
         POP_RET,
 
@@ -66,13 +66,13 @@ namespace KScript.Runtime
         // Arithmetic
 
         /// <summary>
-        /// _ [ptr] [ptr] -- adds b to a, result is stored in a
+        /// _ -- Pops the 2 top values on the stack and adds them together as integers.
         /// </summary>
         ADD_I32,
         /// <summary>
-        /// _ [ptr] [int32] -- adds b to a, result is stored in a
+        /// _ [int32] -- adds b to a, result is stored in a
         /// </summary>
-        ADD_I32_CONST,
+        //ADD_I32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- subtracts b from a, result is stored in a
@@ -81,7 +81,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [int32] -- subtracts b from a, result is stored in a
         /// </summary>
-        SUBTRACT_I32_CONST,
+        //SUBTRACT_I32_CONST,
         
         /// <summary>
         /// _ [ptr] [ptr] -- multiplies a and b, result is stored in a
@@ -90,7 +90,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [int32] -- multiplies a and b, result is stored in a
         /// </summary>
-        MULTIPLY_I32_CONST,
+        //MULTIPLY_I32_CONST,
         
         /// <summary>
         /// _ [ptr] [ptr] -- divides a and b, result is stored in a
@@ -99,7 +99,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [int32] -- divides a and b, result is stored in a
         /// </summary>
-        DIVIDE_I32_CONST,
+        //DIVIDE_I32_CONST,
         
         /// <summary>
         /// _ [ptr] [ptr] -- performs a modulo division a mod b, result is stored in a
@@ -108,7 +108,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [int32] -- performs a modulo division a mod b, result is stored in a
         /// </summary>
-        MODULO_I32_CONST,
+        //MODULO_I32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- adds b to a, result is stored in a
@@ -117,7 +117,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [float32] -- adds b to a, result is stored in a
         /// </summary>
-        ADD_F32_CONST,
+        //ADD_F32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- subtracts b from a, result is stored in a
@@ -126,7 +126,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [float32] -- subtracts b from a, result is stored in a
         /// </summary>
-        SUBTRACT_F32_CONST,
+        //SUBTRACT_F32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- multiplies a and b, result is stored in a
@@ -135,7 +135,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [float32] -- multiplies a and b, result is stored in a
         /// </summary>
-        MULTIPLY_F32_CONST,
+        //MULTIPLY_F32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- divides a and b, result is stored in a
@@ -144,7 +144,7 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [float32] -- divides a and b, result is stored in a
         /// </summary>
-        DIVIDE_F32_CONST,
+        //DIVIDE_F32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- performs a modulo division a mod b, result is stored in a
@@ -153,19 +153,19 @@ namespace KScript.Runtime
         /// <summary>
         /// _ [ptr] [float32] -- performs a modulo division a mod b, result is stored in a
         /// </summary>
-        MODULO_F32_CONST,
+        //MODULO_F32_CONST,
 
         /// <summary>
         /// _ [ptr] [ptr] -- copies the value at b to a, result is stored in a
         /// </summary>
-        SET,
+        //SET,
         /// <summary>
         /// _ [ptr] [any] -- copies b to a, result is stored in a
         /// </summary>
-        SET_CONST,
+        //SET_CONST,
 
         /// <summary>
-        /// _ [ptr] -- pushes the value at a on top of the stack, increments the stack pointer
+        /// _ [ptr] -- Pushes the value of the stack element {0} to the top of the stack, increments the stack pointer
         /// </summary>
         PUSH,
         /// <summary>

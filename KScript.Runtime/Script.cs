@@ -20,7 +20,7 @@ namespace KScript.Runtime
         /// Points to the top of the stack.
         /// </summary>
         /// <remarks>
-        /// Points to the index above the top-most element.
+        /// Points to the index above the top-most element. Also equal to the the number of elements in the stack (its height).
         /// </remarks>
         public int StackPointer { get; private set; }
 
@@ -124,126 +124,126 @@ namespace KScript.Runtime
 
                     case OpCode.ADD_I32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 += Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
+                        Stack[StackPointer - 2].Int32 += Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.ADD_I32_CONST:
+                    /*case OpCode.ADD_I32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 += operands[1].Int32;
-                        break;
+                        break;*/
 
                     // Subtraction
 
                     case OpCode.SUBTRACT_I32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
+                        Stack[StackPointer - 2].Int32 -= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.SUBTRACT_I32_CONST:
+                    /* case OpCode.SUBTRACT_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= operands[1].Int32;
-                        break;
+                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= operands[1].Int32;
+                         break;*/
 
                     // Multiplication
 
                     case OpCode.MULTIPLY_I32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 *= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
+                        Stack[StackPointer - 2].Int32 *= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.MULTIPLY_I32_CONST:
+                    /*case OpCode.MULTIPLY_I32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 *= operands[1].Int32;
-                        break;
+                        break;*/
 
                     // Division
 
                     case OpCode.DIVIDE_I32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 /= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
+                        Stack[StackPointer - 2].Int32 /= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.DIVIDE_I32_CONST:
+                    /*case OpCode.DIVIDE_I32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 /= operands[1].Int32;
-                        break;
+                        break;*/
 
                     // Modular division
 
                     case OpCode.MODULO_I32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 %= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
+                        Stack[StackPointer - 2].Int32 %= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.MODULO_I32_CONST:
+                    /*case OpCode.MODULO_I32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 %= operands[1].Int32;
-                        break;
-                        
+                        break;*/
+
                     // Addition
 
                     case OpCode.ADD_F32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 += Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
+                        Stack[StackPointer - 2].Float32 += Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.ADD_F32_CONST:
+                    /*case OpCode.ADD_F32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 += operands[1].Float32;
-                        break;
+                        break;*/
 
                     // Subtraction
 
                     case OpCode.SUBTRACT_F32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 -= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
+                        Stack[StackPointer - 2].Float32 -= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.SUBTRACT_F32_CONST:
+                    /*case OpCode.SUBTRACT_F32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 -= operands[1].Float32;
-                        break;
+                        break;*/
 
                     // Multiplication
 
                     case OpCode.MULTIPLY_F32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 *= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
+                        Stack[StackPointer - 2].Float32 *= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.MULTIPLY_F32_CONST:
+                    /*case OpCode.MULTIPLY_F32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 *= operands[1].Float32;
-                        break;
+                        break;*/
 
                     // Division
 
                     case OpCode.DIVIDE_F32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 /= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
+                        Stack[StackPointer - 2].Float32 /= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.DIVIDE_F32_CONST:
+                    /*case OpCode.DIVIDE_F32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 /= operands[1].Float32;
-                        break;
+                        break;*/
 
                     // Modular division
 
                     case OpCode.MODULO_F32:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 %= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
+                        Stack[StackPointer - 2].Float32 %= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
                         break;
-                    case OpCode.MODULO_F32_CONST:
+                    /*case OpCode.MODULO_F32_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 %= operands[1].Float32;
-                        break;
+                        break;*/
 
                     // Load
 
-                    case OpCode.SET:
+                    /*case OpCode.SET:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr] = Stack[CurrentStackFramePointer + operands[1].Ptr];
                         break;
                     case OpCode.SET_CONST:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr] = operands[1];
-                        break;
-                        
+                        break;*/
+
                     case OpCode.PUSH:
 
-                        Stack[StackPointer++] = Stack[CurrentStackFramePointer + operands[0].Int32].Int32;
+                        Stack[StackPointer++] = Stack[operands[0].Ptr];
                         break;
                     case OpCode.PUSH_CONST:
 
@@ -253,24 +253,24 @@ namespace KScript.Runtime
                     // Control flow statements
 
                     case OpCode.GOTO_IF_ZERO_I32:
-                        if( Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 == 0 )
+                        if( Stack[StackPointer - 1].Int32 == 0 )
                         {
-                            Current = CurrentStackFramePointer + operands[1].Ptr;
+                            Current = operands[0].Ptr;
                             continue; // don't auto-increment the current
                         }
                         break;
 
                     case OpCode.GOTO_IF_ZERO_F32:
-                        if( Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 == 0 )
+                        if( Stack[StackPointer - 1].Float32 == 0 )
                         {
-                            Current = CurrentStackFramePointer + operands[1].Ptr;
+                            Current = operands[0].Ptr;
                             continue; // don't auto-increment the current
                         }
                         break;
 
                     case OpCode.GOTO:
 
-                        Current = CurrentStackFramePointer + operands[0].Ptr;
+                        Current = operands[0].Ptr;
                         continue; // don't auto-increment the current
 
                     // stack frame / function calls
@@ -280,19 +280,19 @@ namespace KScript.Runtime
                         this.Stack[this.StackPointer] = this.CurrentStackFramePointer;
                         this.CurrentStackFramePointer = this.StackPointer++;
                         break;
-                        
+
                     case OpCode.POP_STACK_FRAME:
 
                         // Doing it 'in reverse' allows to skip a temporary variable.
                         this.StackPointer = this.CurrentStackFramePointer; // pop the frame
                         this.CurrentStackFramePointer = this.Stack[this.CurrentStackFramePointer].Ptr; // restore the previous frame's frame pointer.
                         break;
-                        
+
                     case OpCode.PUSH_RET:
 
                         ReturnStack.Push( Stack[CurrentStackFramePointer + operands[0].Ptr] );
                         break;
-                        
+
                     case OpCode.POP_RET:
 
                         Stack[CurrentStackFramePointer + operands[0].Ptr] = ReturnStack.Pop();

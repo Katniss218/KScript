@@ -12,7 +12,7 @@ namespace KScript.Tests.OpCodeTests
         {
             Script script = new Script( 10, new[]
                 {
-                    (OpCode.ADD_I32, new StackElement[] { 0, 1 })
+                    (OpCode.ADD_I32, new StackElement[] {})
                 } );
 
             script.Push( 0 );
@@ -20,22 +20,7 @@ namespace KScript.Tests.OpCodeTests
 
             script.Run();
 
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
-        }
-
-        [TestMethod]
-        public void AddConst()
-        {
-            Script script = new Script( 10, new[]
-                {
-                    (OpCode.ADD_I32_CONST, new StackElement[] { 0, 5 })
-                } );
-
-            script.Push( 0 );
-
-            script.Run();
-
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
+            Assert.IsTrue( script.StackPointer == 1 && script.Stack[0].Int32 == 5 );
         }
 
         [TestMethod]
@@ -43,7 +28,7 @@ namespace KScript.Tests.OpCodeTests
         {
             Script script = new Script( 10, new[]
                 {
-                    (OpCode.SUBTRACT_I32, new StackElement[] { 0, 1 })
+                    (OpCode.SUBTRACT_I32, new StackElement[] {})
                 } );
 
             script.Push( 10 );
@@ -51,22 +36,7 @@ namespace KScript.Tests.OpCodeTests
 
             script.Run();
 
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
-        }
-
-        [TestMethod]
-        public void SubtractConst()
-        {
-            Script script = new Script( 10, new[]
-                {
-                    (OpCode.SUBTRACT_I32_CONST, new StackElement[] { 0, 5 })
-                } );
-
-            script.Push( 10 );
-
-            script.Run();
-
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
+            Assert.IsTrue( script.StackPointer == 1 && script.Stack[0].Int32 == 5 );
         }
 
         [TestMethod]
@@ -74,7 +44,7 @@ namespace KScript.Tests.OpCodeTests
         {
             Script script = new Script( 10, new[]
                 {
-                    (OpCode.MULTIPLY_I32, new StackElement[] { 0, 1 })
+                    (OpCode.MULTIPLY_I32, new StackElement[] {})
                 } );
 
             script.Push( 5 );
@@ -82,22 +52,7 @@ namespace KScript.Tests.OpCodeTests
 
             script.Run();
 
-            Assert.IsTrue( script.Stack[0].Int32 == 25 );
-        }
-
-        [TestMethod]
-        public void MultiplyConst()
-        {
-            Script script = new Script( 10, new[]
-                {
-                    (OpCode.MULTIPLY_I32_CONST, new StackElement[] { 0, 5 })
-                } );
-
-            script.Push( 5 );
-
-            script.Run();
-
-            Assert.IsTrue( script.Stack[0].Int32 == 25 );
+            Assert.IsTrue( script.StackPointer == 1 && script.Stack[0].Int32 == 25 );
         }
 
         [TestMethod]
@@ -105,7 +60,7 @@ namespace KScript.Tests.OpCodeTests
         {
             Script script = new Script( 10, new[]
                 {
-                    (OpCode.DIVIDE_I32, new StackElement[] { 0, 1 })
+                    (OpCode.DIVIDE_I32, new StackElement[] {})
                 } );
 
             script.Push( 10 );
@@ -113,22 +68,7 @@ namespace KScript.Tests.OpCodeTests
 
             script.Run();
 
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
-        }
-
-        [TestMethod]
-        public void DivideConst()
-        {
-            Script script = new Script( 10, new[]
-                {
-                    (OpCode.DIVIDE_I32_CONST, new StackElement[] { 0, 2 })
-                } );
-
-            script.Push( 10 );
-
-            script.Run();
-
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
+            Assert.IsTrue( script.StackPointer == 1 && script.Stack[0].Int32 == 5 );
         }
 
         [TestMethod]
@@ -136,7 +76,7 @@ namespace KScript.Tests.OpCodeTests
         {
             Script script = new Script( 10, new[]
                 {
-                    (OpCode.MODULO_I32, new StackElement[] { 0, 1 })
+                    (OpCode.MODULO_I32, new StackElement[] {})
                 } );
 
             script.Push( 25 );
@@ -144,22 +84,7 @@ namespace KScript.Tests.OpCodeTests
 
             script.Run();
 
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
-        }
-
-        [TestMethod]
-        public void ModuloConst()
-        {
-            Script script = new Script( 10, new[]
-                {
-                    (OpCode.MODULO_I32_CONST, new StackElement[] { 0, 10 })
-                } );
-
-            script.Push( 25 );
-
-            script.Run();
-
-            Assert.IsTrue( script.Stack[0].Int32 == 5 );
+            Assert.IsTrue( script.StackPointer == 1 && script.Stack[0].Int32 == 5 );
         }
     }
 }
