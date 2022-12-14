@@ -33,8 +33,6 @@ namespace KScript.TestConsole
 
             sw.Stop();
             Console.WriteLine( $"goto script funky: {sw.ElapsedTicks / 10000f} ms" );
-
-
         }
     }
 }
