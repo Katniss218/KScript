@@ -8,6 +8,9 @@ namespace KScript.Runtime
 {
     public class Script
     {
+        // Uses arbitrary stack locations (stored as offset from the stack frame base pointer, which ensures that the variables inside functions always have the same locations)
+        // This method can be more performant, which is important, as well as enable the compiler to perform more advanced optimization techniques, because it can use the entire stack frame.
+
         /// <summary>
         /// Represents the memory assigned to this script. This part is used to store variables and objects.
         /// </summary>
@@ -106,7 +109,7 @@ namespace KScript.Runtime
         {
             while( Current < Op.Length )
             {
-                var (opCode, data) = Op[Current];
+                var (opCode, operands) = Op[Current];
 
                 OperationCounter++;
 
@@ -121,153 +124,153 @@ namespace KScript.Runtime
 
                     case OpCode.ADD_I32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 += Stack[CurrentStackFramePointer + data[1].Ptr].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 += Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
                         break;
                     case OpCode.ADD_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 += data[1].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 += operands[1].Int32;
                         break;
 
                     // Subtraction
 
                     case OpCode.SUBTRACT_I32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 -= Stack[CurrentStackFramePointer + data[1].Ptr].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
                         break;
                     case OpCode.SUBTRACT_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 -= data[1].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= operands[1].Int32;
                         break;
 
                     // Multiplication
 
                     case OpCode.MULTIPLY_I32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 *= Stack[CurrentStackFramePointer + data[1].Ptr].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 *= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
                         break;
                     case OpCode.MULTIPLY_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 *= data[1].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 *= operands[1].Int32;
                         break;
 
                     // Division
 
                     case OpCode.DIVIDE_I32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 /= Stack[CurrentStackFramePointer + data[1].Ptr].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 /= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
                         break;
                     case OpCode.DIVIDE_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 /= data[1].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 /= operands[1].Int32;
                         break;
 
                     // Modular division
 
                     case OpCode.MODULO_I32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 %= Stack[CurrentStackFramePointer + data[1].Ptr].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 %= Stack[CurrentStackFramePointer + operands[1].Ptr].Int32;
                         break;
                     case OpCode.MODULO_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Int32 %= data[1].Int32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 %= operands[1].Int32;
                         break;
                         
                     // Addition
 
                     case OpCode.ADD_F32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 += Stack[CurrentStackFramePointer + data[1].Ptr].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 += Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
                         break;
                     case OpCode.ADD_F32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 += data[1].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 += operands[1].Float32;
                         break;
 
                     // Subtraction
 
                     case OpCode.SUBTRACT_F32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 -= Stack[CurrentStackFramePointer + data[1].Ptr].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 -= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
                         break;
                     case OpCode.SUBTRACT_F32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 -= data[1].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 -= operands[1].Float32;
                         break;
 
                     // Multiplication
 
                     case OpCode.MULTIPLY_F32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 *= Stack[CurrentStackFramePointer + data[1].Ptr].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 *= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
                         break;
                     case OpCode.MULTIPLY_F32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 *= data[1].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 *= operands[1].Float32;
                         break;
 
                     // Division
 
                     case OpCode.DIVIDE_F32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 /= Stack[CurrentStackFramePointer + data[1].Ptr].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 /= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
                         break;
                     case OpCode.DIVIDE_F32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 /= data[1].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 /= operands[1].Float32;
                         break;
 
                     // Modular division
 
                     case OpCode.MODULO_F32:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 %= Stack[CurrentStackFramePointer + data[1].Ptr].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 %= Stack[CurrentStackFramePointer + operands[1].Ptr].Float32;
                         break;
                     case OpCode.MODULO_F32_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr].Float32 %= data[1].Float32;
+                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 %= operands[1].Float32;
                         break;
 
                     // Load
 
                     case OpCode.SET:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr] = Stack[CurrentStackFramePointer + data[1].Ptr];
+                        Stack[CurrentStackFramePointer + operands[0].Ptr] = Stack[CurrentStackFramePointer + operands[1].Ptr];
                         break;
                     case OpCode.SET_CONST:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr] = data[1];
+                        Stack[CurrentStackFramePointer + operands[0].Ptr] = operands[1];
                         break;
                         
                     case OpCode.PUSH:
 
-                        Stack[StackPointer++] = Stack[CurrentStackFramePointer + data[0].Int32].Int32;
+                        Stack[StackPointer++] = Stack[CurrentStackFramePointer + operands[0].Int32].Int32;
                         break;
                     case OpCode.PUSH_CONST:
 
-                        Stack[StackPointer++] = data[0];
+                        Stack[StackPointer++] = operands[0];
                         break;
 
                     // Control flow statements
 
                     case OpCode.GOTO_IF_ZERO_I32:
-                        if( Stack[CurrentStackFramePointer + data[0].Ptr].Int32 == 0 )
+                        if( Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 == 0 )
                         {
-                            Current = CurrentStackFramePointer + data[1].Ptr;
+                            Current = CurrentStackFramePointer + operands[1].Ptr;
                             continue; // don't auto-increment the current
                         }
                         break;
 
                     case OpCode.GOTO_IF_ZERO_F32:
-                        if( Stack[CurrentStackFramePointer + data[0].Ptr].Float32 == 0 )
+                        if( Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 == 0 )
                         {
-                            Current = CurrentStackFramePointer + data[1].Ptr;
+                            Current = CurrentStackFramePointer + operands[1].Ptr;
                             continue; // don't auto-increment the current
                         }
                         break;
 
                     case OpCode.GOTO:
 
-                        Current = CurrentStackFramePointer + data[0].Ptr;
+                        Current = CurrentStackFramePointer + operands[0].Ptr;
                         continue; // don't auto-increment the current
 
                     // stack frame / function calls
@@ -287,12 +290,12 @@ namespace KScript.Runtime
                         
                     case OpCode.PUSH_RET:
 
-                        ReturnStack.Push( Stack[CurrentStackFramePointer + data[0].Ptr] );
+                        ReturnStack.Push( Stack[CurrentStackFramePointer + operands[0].Ptr] );
                         break;
                         
                     case OpCode.POP_RET:
 
-                        Stack[CurrentStackFramePointer + data[0].Ptr] = ReturnStack.Pop();
+                        Stack[CurrentStackFramePointer + operands[0].Ptr] = ReturnStack.Pop();
                         break;
 
                     case OpCode.EXIT:

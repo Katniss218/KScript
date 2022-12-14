@@ -271,7 +271,7 @@ namespace KScript.Language.Parsing
         }
 
         /// <summary>
-        /// Returns the lexed tokens, skips over the whitespace & comment tokens.
+        /// Returns the lexed tokens, skips over the whitespace and comment tokens.
         /// </summary>
         public List<SyntaxToken> GetTokensNoWhiteSpaceNoComment()
         {

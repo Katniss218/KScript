@@ -25,6 +25,7 @@ namespace KScript.Runtime
         /// </summary>
         EXIT = 0,
 
+        // External call - it needs the name and operands compatible with reflection to call the given method.
         EXTERN_CALL,
 
         /// <summary>

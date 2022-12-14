@@ -13,6 +13,7 @@
     {
         public LiteralType Type { get; set; }
 
+#warning TODO - int value?
         public string Value { get; set; }
 
         public Literal( LiteralType type, string value )
