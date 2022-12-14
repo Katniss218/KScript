@@ -1,27 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace KScript.Runtime
 {
-    public class Script
+    public sealed class Script
     {
         // Uses arbitrary stack locations (stored as offset from the stack frame base pointer, which ensures that the variables inside functions always have the same locations)
         // This method can be more performant, which is important, as well as enable the compiler to perform more advanced optimization techniques, because it can use the entire stack frame.
+        /*  Architecture:
+        
+        stack_pointer
+        stack
+        {
+            stack_frames
+            [
+                {
+                    caller_frame_base_pointer
+                    locals, parameters, etc* - dynamic size
+                }
+            ]
+        }
+        return_stack* - dynamic size
+
+        */
 
         /// <summary>
-        /// Represents the memory assigned to this script. This part is used to store variables and objects.
+        /// Represents the memory assigned to this script. This is used to store variables and objects.
         /// </summary>
         public StackElement[] Stack { get; private set; }
 
         /// <summary>
-        /// Points to the top of the stack.
-        /// </summary>
-        /// <remarks>
         /// Points to the index above the top-most element. Also equal to the the number of elements in the stack (its height).
-        /// </remarks>
+        /// </summary>
         public int StackPointer { get; private set; }
 
         /// <summary>
@@ -39,12 +53,12 @@ namespace KScript.Runtime
 
 
         /// <summary>
-        /// Instructions
+        /// This is used to store the instructions to execute.
         /// </summary>
-        public (OpCode opCode, StackElement[] data)[] Op { get; private set; }
+        public (OpCode opCode, StackElement[] data)[] Program { get; private set; }
 
         /// <summary>
-        /// Instruction pointer
+        /// The instruction pointer.
         /// </summary>
         public int Current { get; private set; }
 
@@ -70,7 +84,7 @@ namespace KScript.Runtime
             this.StackPointer = 0;
             this.CurrentStackFramePointer = 0;
 
-            this.Op = op;
+            this.Program = op;
 
             this.ReturnStack = new Stack<StackElement>();
         }
@@ -100,146 +114,79 @@ namespace KScript.Runtime
         /// <remarks>
         /// Will be used for external calls and bindings against fields, and more.
         /// </remarks>
-        //public object Owner { get; set; }
+        public object Owner { get; set; }
 
         /// <summary>
         /// Runs a script
         /// </summary>
         public void Run()
         {
-            while( Current < Op.Length )
+            while( Current < Program.Length )
             {
-                var (opCode, operands) = Op[Current];
+                (OpCode opCode, StackElement[] operands) = Program[Current];
 
                 OperationCounter++;
 
-                if( MaxOperations != null && OperationCounter > MaxOperations.Value )
+                if( MaxOperations.HasValue && OperationCounter > MaxOperations.Value )
                 {
                     throw new Exception( "Exceeded the maximum operation count." );
                 }
 
                 switch( opCode )
                 {
-                    // Addition
+                    // Int32 arithmetic.
 
                     case OpCode.ADD_I32:
 
-                        Stack[StackPointer - 2].Int32 += Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.AddInt32();
                         break;
-                    /*case OpCode.ADD_I32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 += operands[1].Int32;
-                        break;*/
-
-                    // Subtraction
 
                     case OpCode.SUBTRACT_I32:
 
-                        Stack[StackPointer - 2].Int32 -= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.SubtractInt32();
                         break;
-                    /* case OpCode.SUBTRACT_I32_CONST:
-
-                         Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 -= operands[1].Int32;
-                         break;*/
-
-                    // Multiplication
 
                     case OpCode.MULTIPLY_I32:
 
-                        Stack[StackPointer - 2].Int32 *= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.MultiplyInt32();
                         break;
-                    /*case OpCode.MULTIPLY_I32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 *= operands[1].Int32;
-                        break;*/
-
-                    // Division
 
                     case OpCode.DIVIDE_I32:
 
-                        Stack[StackPointer - 2].Int32 /= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.DivideInt32();
                         break;
-                    /*case OpCode.DIVIDE_I32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 /= operands[1].Int32;
-                        break;*/
-
-                    // Modular division
 
                     case OpCode.MODULO_I32:
 
-                        Stack[StackPointer - 2].Int32 %= Stack[--StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.ModuloInt32();
                         break;
-                    /*case OpCode.MODULO_I32_CONST:
 
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Int32 %= operands[1].Int32;
-                        break;*/
-
-                    // Addition
+                    // Float32 arithmetic.
 
                     case OpCode.ADD_F32:
 
-                        Stack[StackPointer - 2].Float32 += Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.AddFloat32();
                         break;
-                    /*case OpCode.ADD_F32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 += operands[1].Float32;
-                        break;*/
-
-                    // Subtraction
 
                     case OpCode.SUBTRACT_F32:
 
-                        Stack[StackPointer - 2].Float32 -= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.SubtractFloat32();
                         break;
-                    /*case OpCode.SUBTRACT_F32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 -= operands[1].Float32;
-                        break;*/
-
-                    // Multiplication
 
                     case OpCode.MULTIPLY_F32:
 
-                        Stack[StackPointer - 2].Float32 *= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.MultiplyFloat32();
                         break;
-                    /*case OpCode.MULTIPLY_F32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 *= operands[1].Float32;
-                        break;*/
-
-                    // Division
 
                     case OpCode.DIVIDE_F32:
 
-                        Stack[StackPointer - 2].Float32 /= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.DivideFloat32();
                         break;
-                    /*case OpCode.DIVIDE_F32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 /= operands[1].Float32;
-                        break;*/
-
-                    // Modular division
 
                     case OpCode.MODULO_F32:
 
-                        Stack[StackPointer - 2].Float32 %= Stack[--StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+                        this.ModuloFloat32();
                         break;
-                    /*case OpCode.MODULO_F32_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr].Float32 %= operands[1].Float32;
-                        break;*/
-
-                    // Load
-
-                    /*case OpCode.SET:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr] = Stack[CurrentStackFramePointer + operands[1].Ptr];
-                        break;
-                    case OpCode.SET_CONST:
-
-                        Stack[CurrentStackFramePointer + operands[0].Ptr] = operands[1];
-                        break;*/
 
                     case OpCode.PUSH:
 
@@ -250,13 +197,15 @@ namespace KScript.Runtime
                         Stack[StackPointer++] = operands[0];
                         break;
 
-                    // Control flow statements
+                    // Control flow
+
+                    // don't auto-increment the program counter if the condition is met.
 
                     case OpCode.GOTO_IF_ZERO_I32:
                         if( Stack[StackPointer - 1].Int32 == 0 )
                         {
                             Current = operands[0].Ptr;
-                            continue; // don't auto-increment the current
+                            continue;
                         }
                         break;
 
@@ -264,14 +213,13 @@ namespace KScript.Runtime
                         if( Stack[StackPointer - 1].Float32 == 0 )
                         {
                             Current = operands[0].Ptr;
-                            continue; // don't auto-increment the current
+                            continue;
                         }
                         break;
 
                     case OpCode.GOTO:
-
                         Current = operands[0].Ptr;
-                        continue; // don't auto-increment the current
+                        continue;
 
                     // stack frame / function calls
 
@@ -301,28 +249,71 @@ namespace KScript.Runtime
                     case OpCode.EXIT:
 
                         return;
-
                 }
 
                 Current++;
             }
         }
 
-        /*
-        
-        stack_pointer
-        stack
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void AddInt32()
         {
-            stack_frames
-            [
-                {
-                    caller_frame_base_pointer
-                    locals, parameters, etc* - dynamic size
-                }
-            ]
+            this.Stack[this.StackPointer - 2].Int32 += this.Stack[--this.StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
         }
-        return_stack* - dynamic size
 
-        */
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void SubtractInt32()
+        {
+            this.Stack[this.StackPointer - 2].Int32 -= this.Stack[--this.StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void MultiplyInt32()
+        {
+            this.Stack[this.StackPointer - 2].Int32 *= this.Stack[--this.StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void DivideInt32()
+        {
+            this.Stack[this.StackPointer - 2].Int32 /= this.Stack[--this.StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void ModuloInt32()
+        {
+            this.Stack[this.StackPointer - 2].Int32 %= this.Stack[--this.StackPointer].Int32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void AddFloat32()
+        {
+            this.Stack[this.StackPointer - 2].Float32 += this.Stack[--this.StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void SubtractFloat32()
+        {
+            this.Stack[this.StackPointer - 2].Float32 -= this.Stack[--this.StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void MultiplyFloat32()
+        {
+            this.Stack[this.StackPointer - 2].Float32 *= this.Stack[--this.StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void DivideFloat32()
+        {
+            this.Stack[this.StackPointer - 2].Float32 /= this.Stack[--this.StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        void ModuloFloat32()
+        {
+            this.Stack[this.StackPointer - 2].Float32 %= this.Stack[--this.StackPointer].Float32; // no need to set the top value to 0 since it's gonna get overwritten anyway.
+        }
     }
 }
